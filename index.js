@@ -44,7 +44,6 @@ app.post('/webhook/', function (req, res) {
                 sendTextMessage(sender, "Hej! Vad vill du ha hjälp med?")
             } else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
-                sendTextMessage(sender, "Glöm nu inte att ringa förskolan och meddela")
             } else if (text.includes('tack')) {
                 sendTextMessage(sender, "Så lite så :)")
                 sendTextMessage(sender, "Krya på er!")
@@ -71,7 +70,7 @@ function sendVabButtonMessage(sender) {
       type: "template",
       payload: {
         template_type: "button",
-        text: "Ok, ditt barn är sjukt. Tråkigt. Du kan anmäla vab här",
+        text: "Ok, ditt barn är sjukt. Tråkigt. Du kan anmäla vab här. Glöm nu inte att ringa förskolan och meddela",
         buttons:[{
           type: "web_url",
           url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
