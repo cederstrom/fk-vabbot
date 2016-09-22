@@ -42,16 +42,15 @@ app.post('/webhook/', function (req, res) {
             let text = event.message.text.toLowerCase()
             if (text.includes('hej') || text.includes('hallå')) {
                 sendTextMessage(sender, "Hej! Vad vill du ha hjälp med?")
-            }
-            else if (text.includes('vab')) {
+            } else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
                 sendTextMessage(sender, "Glöm nu inte att ringa förskolan och meddela")
-            }
-            else if (text.includes('tack')) {
+            } else if (text.includes('tack')) {
                 sendTextMessage(sender, "Så lite så :)")
                 sendTextMessage(sender, "Krya på er!")
+            } else {
+                sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
             }
-            sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
         }
     }
     res.sendStatus(200)
