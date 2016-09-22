@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+    if (req.query['hub.verify_token'] === process.env.VALIDATION_TOKEN) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
@@ -44,4 +44,23 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-const token = "<PAGE_ACCESS_TOKEN>"
+const access_token = process.env.ACCESS_TOKEN
+
+function sendTextMessage(sender, text) {
+    let messageData = { text:text }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:access_token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
