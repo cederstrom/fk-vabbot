@@ -45,8 +45,7 @@ app.post('/webhook/', function (req, res) {
             } else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
             } else if (text.includes('tack')) {
-                sendTextMessage(sender, "Så lite så :)")
-                sendTextMessage(sender, "Krya på er!")
+                sendTextMessage(sender, "Så lite så! Krya på er :)")
             } else {
                 sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
             }
