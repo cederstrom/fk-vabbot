@@ -74,7 +74,7 @@ function sendTextMessage(sender, text) {
  *
  */
 function sendVabButtonMessage(recipientId) {
-  var messageData = {
+  let messageData = {
     recipient: {
       id: recipientId
     },
@@ -94,35 +94,20 @@ function sendVabButtonMessage(recipientId) {
     }
   };  
 
-  callSendAPI(messageData);
-}
-
-/*
- * Call the Send API. The message data goes in the body. If successful, we'll 
- * get the message id in a response 
- *
- */
-function callSendAPI(messageData) {
   request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: access_token },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      if (messageId) {
-        console.log("Successfully sent message with id %s to recipient %s", 
-          messageId, recipientId);
-      } else {
-      console.log("Successfully called Send API for recipient %s", 
-        recipientId);
-      }
-    } else {
-      console.error(response.error);
-    }
-  });  
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:access_token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
 }
+
