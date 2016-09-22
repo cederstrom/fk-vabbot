@@ -4,6 +4,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
+const accessToken = process.env.ACCESS_TOKEN
+const validationToken = process.env.VALIDATION_TOKEN
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -20,7 +22,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === process.env.VALIDATION_TOKEN) {
+    if (req.query['hub.verify_token'] === validationToken) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
@@ -37,10 +39,17 @@ app.post('/webhook/', function (req, res) {
         let event = req.body.entry[0].messaging[i]
         let sender = event.sender.id
         if (event.message && event.message.text) {
-            let text = event.message.text
-            if (text.indexOf('vab') > -1) {
+            let text = event.message.text.toLowerCase()
+            if (text.includes('hej') || text.includes('hallå')) {
+                sendTextMessage(sender, "Hej! Vad vill du ha hjälp med?")
+            }
+            else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
-                sendTextMessage(sender, "Glöm nu inte att ringa förskolan och meddela. Krya på er!")
+                sendTextMessage(sender, "Glöm nu inte att ringa förskolan och meddela")
+            }
+            else if (text.includes('tack')) {
+                sendTextMessage(sender, "Så lite så :)")
+                sendTextMessage(sender, "Krya på er!")
             }
             sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
         }
@@ -48,25 +57,9 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-const access_token = process.env.ACCESS_TOKEN
-
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:access_token},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
+    sendMessage(sender, messageData)
 }
 
 /*
@@ -79,7 +72,7 @@ function sendVabButtonMessage(sender) {
       type: "template",
       payload: {
         template_type: "button",
-        text: "Ok, ditt barn är sjuk. Tråkigt. Du kan anmäla vab här",
+        text: "Ok, ditt barn är sjukt. Tråkigt. Du kan anmäla vab här",
         buttons:[{
           type: "web_url",
           url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
@@ -87,11 +80,14 @@ function sendVabButtonMessage(sender) {
         }]
       }
     }
-  };  
+  };
+  sendMessage(sender, messageData)
+}
 
-  request({
+function sendMessage(sender, messageData) {
+    request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:access_token},
+        qs: {access_token: accessToken},
         method: 'POST',
         json: {
             recipient: {id:sender},
@@ -105,4 +101,3 @@ function sendVabButtonMessage(sender) {
         }
     })
 }
-
