@@ -87,7 +87,7 @@ function sendImageMessage(sender, text) {
     attachment: {
       type: "image",
       payload: {
-        url: SERVER_URL + "/assets/rift.png"
+        url: "https://s-media-cache-ak0.pinimg.com/236x/fb/c9/4c/fbc94ccaf73e484fa1e787f28181bba8.jpg"
       }
     }
   };
