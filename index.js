@@ -45,7 +45,8 @@ app.post('/webhook/', function (req, res) {
             } else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
             } else if (text.includes('tack')) {
-                sendTextMessage(sender, "Så lite så! Krya på er :)")
+                sendTextMessage(sender, "Så lite så! Krya på er :)");
+                sendImageMessage(sender);
             } else {
                 sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
             }
@@ -79,6 +80,18 @@ function sendVabButtonMessage(sender) {
     }
   };
   sendMessage(sender, messageData)
+}
+
+function sendImageMessage(sender) {
+  var messageData = {
+    attachment: {
+      type: "image",
+      payload: {
+        url: SERVER_URL + "/assets/rift.png"
+      }
+    }
+  };
+  sendMessage(sender, messageData);
 }
 
 function sendMessage(sender, messageData) {
