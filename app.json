@@ -1,0 +1,7 @@
+{
+  "name": "fk-vabbot",
+  "description": "fk-vabbot är en demo-bot för att anmäla vabb i facebook messenger",
+  "repository": "https://github.com/cederstrom/fk-vabbot",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "chat bot"]
+}
