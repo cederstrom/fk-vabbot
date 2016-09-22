@@ -41,7 +41,7 @@ app.post('/webhook/', function (req, res) {
         if (event.message && event.message.text) {
             let text = event.message.text.toLowerCase()
             if (text.includes('hej') || text.includes('hallå')) {
-                sendTextMessage(sender, "Hej! Vad vill du ha hjälp med?")
+                sendTextMessage(sender, "Hej! Vad kan jag hjälpa dig med?")
             } else if (text.includes('vab')) {
                 sendVabButtonMessage(sender)
             } else if (text.includes('tack')) {
