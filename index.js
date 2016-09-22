@@ -37,8 +37,12 @@ app.post('/webhook/', function (req, res) {
         let event = req.body.entry[0].messaging[i]
         let sender = event.sender.id
         if (event.message && event.message.text) {
+            if (text.indexOf('vab') > -1 || text.indexOf('vabb') > -1) {
+                sendVabButtonMessage(sender)
+                sendTextMessage(sender, "Glöm nu inte att ringa förskolan och meddela. Krya på er!")
+            }
             let text = event.message.text
-            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+            sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
         }
     }
     res.sendStatus(200)
@@ -63,4 +67,62 @@ function sendTextMessage(sender, text) {
             console.log('Error: ', response.body.error)
         }
     })
+}
+
+/*
+ * Send a button message using the Send API.
+ *
+ */
+function sendVabButtonMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Ok, ditt barn är sjuk. Tråkigt. Du kan anmäla vab här",
+          buttons:[{
+            type: "web_url",
+            url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
+            title: "Anmäl vab"
+          }]
+        }
+      }
+    }
+  };  
+
+  callSendAPI(messageData);
+}
+
+/*
+ * Call the Send API. The message data goes in the body. If successful, we'll 
+ * get the message id in a response 
+ *
+ */
+function callSendAPI(messageData) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      if (messageId) {
+        console.log("Successfully sent message with id %s to recipient %s", 
+          messageId, recipientId);
+      } else {
+      console.log("Successfully called Send API for recipient %s", 
+        recipientId);
+      }
+    } else {
+      console.error(response.error);
+    }
+  });  
 }
