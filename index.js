@@ -73,23 +73,18 @@ function sendTextMessage(sender, text) {
  * Send a button message using the Send API.
  *
  */
-function sendVabButtonMessage(recipientId) {
+function sendVabButtonMessage(sender) {
   let messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "button",
-          text: "Ok, ditt barn är sjuk. Tråkigt. Du kan anmäla vab här",
-          buttons:[{
-            type: "web_url",
-            url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
-            title: "Anmäl vab"
-          }]
-        }
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "button",
+        text: "Ok, ditt barn är sjuk. Tråkigt. Du kan anmäla vab här",
+        buttons:[{
+          type: "web_url",
+          url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
+          title: "Anmäl vab"
+        }]
       }
     }
   };  
