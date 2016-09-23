@@ -47,6 +47,10 @@ app.post('/webhook/', function (req, res) {
             } else if (text.includes('tack')) {
                 sendTextMessage(sender, "Så lite så! Krya på er :)")
                 sendImageMessage(sender)
+            } else if (text.includes('meningen med livet')) {
+                sendTextMessage(sender, "42")
+            } else if (text.includes('bostadsbidrag')) {
+                sendTextMessage(sender, "42")
             } else {
                 sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
             }
@@ -60,10 +64,6 @@ function sendTextMessage(sender, text) {
     sendMessage(sender, messageData)
 }
 
-/*
- * Send a button message using the Send API.
- *
- */
 function sendVabButtonMessage(sender) {
   let messageData = {
     attachment: {
@@ -75,6 +75,24 @@ function sendVabButtonMessage(sender) {
           type: "web_url",
           url: "https://www.forsakringskassan.se/privatpers/tjanster/anmalvaboinloggad/",
           title: "Anmäl vab"
+        }]
+      }
+    }
+  };
+  sendMessage(sender, messageData)
+}
+
+function sendBobButtonMessage(sender) {
+  let messageData = {
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "button",
+        text: "Ok, du är i behov av bostadsbidrag",
+        buttons:[{
+          type: "web_url",
+          url: "https://www.forsakringskassan.se/privatpers/studerande/bostadsbidrag_till_unga",
+          title: "Läs mer om bostadsbidrag"
         }]
       }
     }
