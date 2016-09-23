@@ -50,7 +50,7 @@ app.post('/webhook/', function (req, res) {
             } else if (text.includes('meningen med livet')) {
                 sendTextMessage(sender, "42")
             } else if (text.includes('bostadsbidrag')) {
-                sendTextMessage(sender, "42")
+                sendBobButtonMessage(sender)
             } else {
                 sendTextMessage(sender, "Jag förstår inte kan du förtydliga?")
             }
